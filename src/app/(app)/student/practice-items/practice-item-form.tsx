@@ -3,12 +3,10 @@
 import { useActionState } from 'react'
 import { useFormStatus } from 'react-dom'
 
-import { createPracticeItem } from '@/app/(app)/student/practice-items/actions'
-
-type CreatePracticeItemState = {
-  ok: boolean
-  error?: string
-}
+import {
+  createPracticeItem,
+  type CreatePracticeItemState,
+} from '@/app/(app)/student/practice-items/actions'
 
 const initialState: CreatePracticeItemState = {
   ok: false,

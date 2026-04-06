@@ -13,7 +13,15 @@ const createPracticeItemSchema = z.object({
   notes: z.string().trim().max(2000).optional().or(z.literal('')),
 })
 
-export async function createPracticeItem(formData: FormData) {
+export type CreatePracticeItemState = {
+  ok: boolean
+  error?: string
+}
+
+export async function createPracticeItem(
+  _prevState: CreatePracticeItemState,
+  formData: FormData,
+): Promise<CreatePracticeItemState> {
   const session = await requireStudent()
 
   const parsed = createPracticeItemSchema.safeParse({

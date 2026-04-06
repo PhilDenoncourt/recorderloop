@@ -13,7 +13,15 @@ const onboardingSchema = z.object({
   timezone: z.string().trim().max(100).optional().or(z.literal('')),
 })
 
-export async function completeOnboarding(formData: FormData) {
+export type CompleteOnboardingState = {
+  ok: boolean
+  error?: string
+}
+
+export async function completeOnboarding(
+  _prevState: CompleteOnboardingState,
+  formData: FormData,
+): Promise<CompleteOnboardingState> {
   const session = await requireSession()
 
   const parsed = onboardingSchema.safeParse({
