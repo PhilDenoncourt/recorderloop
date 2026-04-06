@@ -1,0 +1,3 @@
+// Source of truth moved to prisma/schema.prisma
+// Keep this file only temporarily if external notes still reference it.
+// Prefer using prisma/schema.prisma for all Prisma commands.
