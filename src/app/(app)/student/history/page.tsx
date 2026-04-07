@@ -12,9 +12,17 @@ function formatSessionDate(date: Date) {
   }).format(date)
 }
 
+function formatDate(date: Date) {
+  return new Intl.DateTimeFormat('en-US', {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric',
+  }).format(date)
+}
+
 export default async function StudentHistoryPage() {
   const session = await requireStudent()
-  const { sessions, summary } = await getStudentHistoryData(session.user.id)
+  const { sessions, summary, itemSummaries, assignmentProgress } = await getStudentHistoryData(session.user.id)
 
   return (
     <div className="mx-auto flex max-w-5xl flex-col gap-6 px-4 py-6 sm:px-6 sm:py-8">
@@ -38,7 +46,9 @@ export default async function StudentHistoryPage() {
         <section className="rounded-xl border border-neutral-200 bg-white p-4 shadow-sm sm:p-5">
           <p className="text-sm text-neutral-500">Sessions in last 7 days</p>
           <p className="mt-2 text-3xl font-semibold text-neutral-950">{summary.sessionsLast7Days}</p>
-          <p className="mt-2 text-sm text-neutral-600">{summary.activeDaysLast7Days} active day{summary.activeDaysLast7Days === 1 ? '' : 's'}</p>
+          <p className="mt-2 text-sm text-neutral-600">
+            {summary.activeDaysLast7Days} active day{summary.activeDaysLast7Days === 1 ? '' : 's'}
+          </p>
         </section>
 
         <section className="rounded-xl border border-neutral-200 bg-white p-4 shadow-sm sm:p-5">
@@ -50,15 +60,92 @@ export default async function StudentHistoryPage() {
         <section className="rounded-xl border border-neutral-200 bg-white p-4 shadow-sm sm:p-5">
           <p className="text-sm text-neutral-500">Minutes in last 30 days</p>
           <p className="mt-2 text-3xl font-semibold text-neutral-950">{summary.totalMinutesLast30Days}</p>
-          <p className="mt-2 text-sm text-neutral-600">Across {summary.activeDaysLast30Days} active day{summary.activeDaysLast30Days === 1 ? '' : 's'}</p>
+          <p className="mt-2 text-sm text-neutral-600">
+            Across {summary.activeDaysLast30Days} active day{summary.activeDaysLast30Days === 1 ? '' : 's'}
+          </p>
         </section>
 
         <section className="rounded-xl border border-neutral-200 bg-white p-4 shadow-sm sm:p-5">
           <p className="text-sm text-neutral-500">Current streak</p>
           <p className="mt-2 text-3xl font-semibold text-neutral-950">{summary.streakDays}</p>
-          <p className="mt-2 text-sm text-neutral-600">Consecutive day{summary.streakDays === 1 ? '' : 's'} with practice</p>
+          <p className="mt-2 text-sm text-neutral-600">
+            Consecutive day{summary.streakDays === 1 ? '' : 's'} with practice
+          </p>
         </section>
       </div>
+
+      <section className="grid gap-6 xl:grid-cols-[1fr_1fr]">
+        <div className="overflow-hidden rounded-xl border border-neutral-200 bg-white shadow-sm">
+          <div className="border-b border-neutral-200 px-4 py-3">
+            <h2 className="text-lg font-semibold">Assignment follow-through</h2>
+          </div>
+
+          {assignmentProgress.length === 0 ? (
+            <div className="px-4 py-6 text-sm text-neutral-600">No active assignments to track right now.</div>
+          ) : (
+            <ul className="divide-y divide-neutral-200">
+              {assignmentProgress.map((assignment) => (
+                <li key={assignment.assignmentId} className="space-y-2 px-4 py-4">
+                  <div className="flex flex-wrap items-start justify-between gap-3">
+                    <div>
+                      <p className="font-medium text-neutral-950">{assignment.title}</p>
+                      <p className="text-sm text-neutral-600">From {assignment.teacherName}</p>
+                    </div>
+                    <span className="rounded-full bg-neutral-100 px-2 py-1 text-xs uppercase tracking-wide text-neutral-600">
+                      {assignment.dueDate ? `Due ${formatDate(assignment.dueDate)}` : 'No due date'}
+                    </span>
+                  </div>
+
+                  <p className="text-sm text-neutral-600">
+                    {assignment.practicedAssignedItems} of {assignment.totalAssignedItems} assigned item
+                    {assignment.totalAssignedItems === 1 ? '' : 's'} practiced ({assignment.completionPercent}% coverage)
+                  </p>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+
+        <div className="overflow-hidden rounded-xl border border-neutral-200 bg-white shadow-sm">
+          <div className="border-b border-neutral-200 px-4 py-3">
+            <h2 className="text-lg font-semibold">Most practiced items</h2>
+          </div>
+
+          {itemSummaries.length === 0 ? (
+            <div className="px-4 py-6 text-sm text-neutral-600">No item trends yet.</div>
+          ) : (
+            <ul className="divide-y divide-neutral-200">
+              {itemSummaries.map((item) => (
+                <li key={item.practiceItemId} className="space-y-2 px-4 py-4">
+                  <div className="flex flex-wrap items-start justify-between gap-3">
+                    <div>
+                      <p className="font-medium text-neutral-950">{item.title}</p>
+                      <p className="text-xs uppercase tracking-wide text-neutral-500">{item.category}</p>
+                    </div>
+                    <span className="rounded-full bg-neutral-100 px-2 py-1 text-xs uppercase tracking-wide text-neutral-600">
+                      {item.sessionsCount} session{item.sessionsCount === 1 ? '' : 's'}
+                    </span>
+                  </div>
+
+                  <p className="text-sm text-neutral-600">Last practiced {formatDate(item.latestSessionDate)}</p>
+
+                  {item.latestImprovement ? (
+                    <p className="text-sm text-neutral-600">
+                      <span className="font-medium text-neutral-900">Latest improvement:</span> {item.latestImprovement}
+                    </p>
+                  ) : null}
+
+                  {item.latestWeakSpot ? (
+                    <p className="text-sm text-neutral-600">
+                      <span className="font-medium text-neutral-900">Latest weak spot:</span> {item.latestWeakSpot}
+                    </p>
+                  ) : null}
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+      </section>
 
       {sessions.length === 0 ? (
         <section className="rounded-xl border border-dashed border-neutral-300 bg-white p-6 shadow-sm">
@@ -99,7 +186,7 @@ export default async function StudentHistoryPage() {
                 {practiceSession.notes ? (
                   <div className="space-y-1">
                     <h3 className="text-sm font-medium text-neutral-950">Session notes</h3>
-                    <p className="text-sm leading-6 text-neutral-700 whitespace-pre-wrap">{practiceSession.notes}</p>
+                    <p className="whitespace-pre-wrap text-sm leading-6 text-neutral-700">{practiceSession.notes}</p>
                   </div>
                 ) : null}
 
@@ -120,7 +207,7 @@ export default async function StudentHistoryPage() {
                             <p className="text-xs font-medium uppercase tracking-wide text-neutral-500">
                               Tempo reached
                             </p>
-                            <p className="mt-1 text-sm text-neutral-700 whitespace-pre-wrap">
+                            <p className="mt-1 whitespace-pre-wrap text-sm text-neutral-700">
                               {item.tempoReached || '—'}
                             </p>
                           </div>
@@ -129,7 +216,7 @@ export default async function StudentHistoryPage() {
                             <p className="text-xs font-medium uppercase tracking-wide text-neutral-500">
                               Improvements
                             </p>
-                            <p className="mt-1 text-sm text-neutral-700 whitespace-pre-wrap">
+                            <p className="mt-1 whitespace-pre-wrap text-sm text-neutral-700">
                               {item.improvementNotes || '—'}
                             </p>
                           </div>
@@ -138,7 +225,7 @@ export default async function StudentHistoryPage() {
                             <p className="text-xs font-medium uppercase tracking-wide text-neutral-500">
                               Weak spots
                             </p>
-                            <p className="mt-1 text-sm text-neutral-700 whitespace-pre-wrap">{item.weakSpots || '—'}</p>
+                            <p className="mt-1 whitespace-pre-wrap text-sm text-neutral-700">{item.weakSpots || '—'}</p>
                           </div>
                         </div>
                       </li>
