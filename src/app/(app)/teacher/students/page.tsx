@@ -141,7 +141,12 @@ export default async function TeacherStudentsPage() {
                       </div>
                       <div>
                         <p className="text-xs uppercase tracking-wide text-neutral-500">Next</p>
-                        <p className="mt-1 font-medium text-neutral-950">Assignment + review actions coming next</p>
+                        <Link
+                          href={`/teacher/students/${student.id}`}
+                          className="mt-1 inline-block font-medium text-neutral-950 underline underline-offset-4"
+                        >
+                          Open protected review page
+                        </Link>
                       </div>
                     </div>
                   </li>

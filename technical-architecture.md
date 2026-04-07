@@ -625,7 +625,7 @@ Lesson scheduling is out of scope for the wedge. Don’t blur the app into studi
 
 ### Teacher routes
 - `/teacher` — dashboard
-- `/teacher/students/[studentId]` — student overview/review page
+- `/teacher/students/[studentId]` — student overview/review page, protected by active teacher/student link validation
 - `/teacher/assignments/new` — create assignment
 - `/teacher/assignments/[assignmentId]` — assignment detail
 
