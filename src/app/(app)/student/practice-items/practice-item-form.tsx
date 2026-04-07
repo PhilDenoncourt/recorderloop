@@ -5,14 +5,26 @@ import { useFormStatus } from 'react-dom'
 
 import {
   createPracticeItem,
-  type CreatePracticeItemState,
+  type PracticeItemFormState,
 } from '@/app/(app)/student/practice-items/actions'
+import type { PracticeItemCategory } from '@prisma/client'
 
-const initialState: CreatePracticeItemState = {
+type PracticeItemFormProps = {
+  mode?: 'create' | 'edit'
+  action?: (state: PracticeItemFormState, formData: FormData) => Promise<PracticeItemFormState>
+  initialValues?: {
+    title: string
+    category: PracticeItemCategory
+    notes: string
+    isActive: boolean
+  }
+}
+
+const initialState: PracticeItemFormState = {
   ok: false,
 }
 
-function SubmitButton() {
+function SubmitButton({ mode }: { mode: 'create' | 'edit' }) {
   const { pending } = useFormStatus()
 
   return (
@@ -21,20 +33,28 @@ function SubmitButton() {
       type="submit"
       disabled={pending}
     >
-      {pending ? 'Saving…' : 'Add practice item'}
+      {pending ? 'Saving…' : mode === 'edit' ? 'Save changes' : 'Add practice item'}
     </button>
   )
 }
 
-export function PracticeItemForm() {
-  const [state, formAction] = useActionState(createPracticeItem, initialState)
+export function PracticeItemForm({
+  mode = 'create',
+  action = createPracticeItem,
+  initialValues,
+}: PracticeItemFormProps) {
+  const [state, formAction] = useActionState(action, initialState)
 
   return (
     <form action={formAction} className="space-y-4 rounded-lg border p-4">
       <div className="space-y-2">
-        <h2 className="text-lg font-semibold">Add a practice item</h2>
+        <h2 className="text-lg font-semibold">
+          {mode === 'edit' ? 'Edit practice item' : 'Add a practice item'}
+        </h2>
         <p className="text-sm text-neutral-600">
-          Create a piece, exercise, scale, or technique item for your practice list.
+          {mode === 'edit'
+            ? 'Update the title, category, notes, or active status for this practice item.'
+            : 'Create a piece, exercise, scale, or technique item for your practice list.'}
         </p>
       </div>
 
@@ -48,6 +68,7 @@ export function PracticeItemForm() {
           name="title"
           type="text"
           placeholder="Greensleeves"
+          defaultValue={initialValues?.title ?? ''}
           required
         />
       </div>
@@ -56,7 +77,13 @@ export function PracticeItemForm() {
         <label className="block text-sm font-medium" htmlFor="category">
           Category
         </label>
-        <select className="w-full rounded-md border px-3 py-2" id="category" name="category" required>
+        <select
+          className="w-full rounded-md border px-3 py-2"
+          id="category"
+          name="category"
+          defaultValue={initialValues?.category ?? 'PIECE'}
+          required
+        >
           <option value="PIECE">Piece</option>
           <option value="SCALE">Scale</option>
           <option value="EXERCISE">Exercise</option>
@@ -74,8 +101,26 @@ export function PracticeItemForm() {
           id="notes"
           name="notes"
           placeholder="What should you focus on?"
+          defaultValue={initialValues?.notes ?? ''}
         />
       </div>
+
+      {mode === 'edit' ? (
+        <label className="flex items-center gap-3 rounded-md border border-neutral-200 px-3 py-3">
+          <input
+            id="isActive"
+            name="isActive"
+            type="checkbox"
+            defaultChecked={initialValues?.isActive ?? true}
+          />
+          <div>
+            <p className="text-sm font-medium text-neutral-900">Active practice item</p>
+            <p className="text-sm text-neutral-600">
+              Inactive items stay in your history but won’t appear in new session logging.
+            </p>
+          </div>
+        </label>
+      ) : null}
 
       {state.error ? (
         <p className="rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">
@@ -89,7 +134,7 @@ export function PracticeItemForm() {
         </p>
       ) : null}
 
-      <SubmitButton />
+      <SubmitButton mode={mode} />
     </form>
   )
 }

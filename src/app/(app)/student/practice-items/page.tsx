@@ -1,3 +1,5 @@
+import Link from 'next/link'
+
 import { requireStudent } from '@/lib/permissions'
 import { prisma } from '@/lib/prisma'
 
@@ -46,7 +48,14 @@ export default async function StudentPracticeItemsPage() {
                   <li key={item.id} className="space-y-2 px-4 py-4">
                     <div className="flex items-start justify-between gap-4">
                       <div>
-                        <h3 className="font-medium">{item.title}</h3>
+                        <h3 className="font-medium">
+                          <Link
+                            href={`/student/practice-items/${item.id}`}
+                            className="underline underline-offset-4"
+                          >
+                            {item.title}
+                          </Link>
+                        </h3>
                         <p className="mt-1 text-xs uppercase tracking-wide text-neutral-500">
                           {item.category}
                         </p>
@@ -63,6 +72,15 @@ export default async function StudentPracticeItemsPage() {
                     </div>
 
                     {item.notes ? <p className="text-sm text-neutral-700">{item.notes}</p> : null}
+
+                    <div>
+                      <Link
+                        href={`/student/practice-items/${item.id}`}
+                        className="text-sm font-medium underline underline-offset-4"
+                      >
+                        Edit item
+                      </Link>
+                    </div>
                   </li>
                 ))}
               </ul>
