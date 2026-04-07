@@ -94,6 +94,7 @@ export async function createPracticeSession(input: {
   })
 
   revalidatePath('/student')
+  revalidatePath('/student/sessions')
   revalidatePath('/student/sessions/new')
 
   return { ok: true }

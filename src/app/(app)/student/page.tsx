@@ -68,8 +68,14 @@ export default async function StudentDashboardPage() {
         </section>
 
         <section className="overflow-hidden rounded-xl border border-neutral-200 bg-white shadow-sm">
-          <div className="border-b border-neutral-200 px-4 py-3">
+          <div className="flex items-center justify-between gap-4 border-b border-neutral-200 px-4 py-3">
             <h2 className="text-lg font-semibold">Recent sessions</h2>
+            <Link
+              href="/student/sessions"
+              className="text-sm font-medium text-neutral-900 underline underline-offset-4"
+            >
+              View history
+            </Link>
           </div>
 
           {data.recentSessions.length === 0 ? (
@@ -81,6 +87,9 @@ export default async function StudentDashboardPage() {
                   <p className="font-medium">{new Date(sessionItem.sessionDate).toLocaleDateString()}</p>
                   <p className="text-sm text-neutral-600">
                     {sessionItem.durationMinutes ? `${sessionItem.durationMinutes} min` : 'Duration not set'}
+                  </p>
+                  <p className="mt-1 text-sm text-neutral-500">
+                    {sessionItem.items.length} item{sessionItem.items.length === 1 ? '' : 's'} logged
                   </p>
                 </li>
               ))}
