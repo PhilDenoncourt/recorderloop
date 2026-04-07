@@ -33,19 +33,28 @@ export default async function StudentDashboardPage() {
         <div className="rounded-xl border border-neutral-200 bg-white p-4 shadow-sm sm:p-5">
           <p className="text-sm text-neutral-500">Recent sessions</p>
           <p className="mt-2 text-3xl font-semibold">{data.recentSessions.length}</p>
+          <Link className="mt-4 inline-block text-sm underline underline-offset-4" href="/student/sessions/new">
+            Log a session
+          </Link>
         </div>
       </div>
 
       <div className="grid gap-6 lg:grid-cols-2">
         <section className="overflow-hidden rounded-xl border border-neutral-200 bg-white shadow-sm">
-          <div className="border-b border-neutral-200 px-4 py-3">
+          <div className="flex items-center justify-between gap-4 border-b border-neutral-200 px-4 py-3">
             <h2 className="text-lg font-semibold">Current practice items</h2>
+            {data.practiceItems.length > 0 ? (
+              <Link
+                href="/student/sessions/new"
+                className="text-sm font-medium text-neutral-900 underline underline-offset-4"
+              >
+                Quick log
+              </Link>
+            ) : null}
           </div>
 
           {data.practiceItems.length === 0 ? (
-            <div className="px-4 py-6 text-sm text-neutral-600">
-              No practice items yet.
-            </div>
+            <div className="px-4 py-6 text-sm text-neutral-600">No practice items yet.</div>
           ) : (
             <ul className="divide-y divide-neutral-200">
               {data.practiceItems.map((item) => (
@@ -69,9 +78,7 @@ export default async function StudentDashboardPage() {
             <ul className="divide-y divide-neutral-200">
               {data.recentSessions.map((sessionItem) => (
                 <li key={sessionItem.id} className="px-4 py-3">
-                  <p className="font-medium">
-                    {new Date(sessionItem.sessionDate).toLocaleDateString()}
-                  </p>
+                  <p className="font-medium">{new Date(sessionItem.sessionDate).toLocaleDateString()}</p>
                   <p className="text-sm text-neutral-600">
                     {sessionItem.durationMinutes ? `${sessionItem.durationMinutes} min` : 'Duration not set'}
                   </p>

@@ -1,6 +1,7 @@
 'use server'
 
 import { revalidatePath } from 'next/cache'
+import { redirect } from 'next/navigation'
 import { z } from 'zod'
 
 import { prisma } from '@/lib/prisma'
@@ -19,6 +20,19 @@ const createPracticeSessionSchema = z.object({
   notes: z.string().trim().max(2000).optional().or(z.literal('')),
   items: z.array(practiceSessionItemSchema).min(1),
 })
+
+const formItemSchema = z.object({
+  selected: z.boolean().optional(),
+  practiceItemId: z.string().min(1),
+  tempoReached: z.string().optional(),
+  improvementNotes: z.string().optional(),
+  weakSpots: z.string().optional(),
+})
+
+export type CreatePracticeSessionFormState = {
+  ok: boolean
+  error?: string
+}
 
 export async function createPracticeSession(input: {
   sessionDate: string
@@ -80,7 +94,63 @@ export async function createPracticeSession(input: {
   })
 
   revalidatePath('/student')
-  revalidatePath('/student/history')
+  revalidatePath('/student/sessions/new')
 
   return { ok: true }
+}
+
+export async function createPracticeSessionFromForm(
+  _prevState: CreatePracticeSessionFormState,
+  formData: FormData,
+): Promise<CreatePracticeSessionFormState> {
+  const rawItems = new Map<number, Record<string, FormDataEntryValue>>()
+
+  for (const [key, value] of formData.entries()) {
+    const match = key.match(/^items\.(\d+)\.(selected|practiceItemId|tempoReached|improvementNotes|weakSpots)$/)
+
+    if (!match) {
+      continue
+    }
+
+    const index = Number(match[1])
+    const field = match[2]
+    const item = rawItems.get(index) ?? {}
+
+    item[field] = value
+    rawItems.set(index, item)
+  }
+
+  const selectedItems = Array.from(rawItems.values())
+    .map((item) =>
+      formItemSchema.parse({
+        selected: item.selected === 'true',
+        practiceItemId: item.practiceItemId,
+        tempoReached: typeof item.tempoReached === 'string' ? item.tempoReached : undefined,
+        improvementNotes:
+          typeof item.improvementNotes === 'string' ? item.improvementNotes : undefined,
+        weakSpots: typeof item.weakSpots === 'string' ? item.weakSpots : undefined,
+      }),
+    )
+    .filter((item) => item.selected)
+    .map(({ practiceItemId, tempoReached, improvementNotes, weakSpots }) => ({
+      practiceItemId,
+      tempoReached,
+      improvementNotes,
+      weakSpots,
+    }))
+
+  const result = await createPracticeSession({
+    sessionDate: String(formData.get('sessionDate') ?? ''),
+    durationMinutes: formData.get('durationMinutes')
+      ? Number(formData.get('durationMinutes'))
+      : null,
+    notes: String(formData.get('notes') ?? ''),
+    items: selectedItems,
+  })
+
+  if (!result.ok) {
+    return result
+  }
+
+  redirect('/student')
 }

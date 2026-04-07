@@ -18,6 +18,7 @@ export default async function AppLayout({ children }: AppLayoutProps) {
     ? [
         { href: '/student', label: 'Dashboard' },
         { href: '/student/practice-items', label: 'Practice items' },
+        { href: '/student/sessions/new', label: 'Log session' },
       ]
     : [
         { href: '/teacher', label: 'Dashboard' },
