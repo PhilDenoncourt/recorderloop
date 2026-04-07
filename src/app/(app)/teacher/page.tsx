@@ -11,6 +11,21 @@ function formatSessionDate(date: Date) {
   }).format(date)
 }
 
+function formatMinutes(totalMinutes: number) {
+  if (totalMinutes < 60) {
+    return `${totalMinutes} min`
+  }
+
+  const hours = Math.floor(totalMinutes / 60)
+  const minutes = totalMinutes % 60
+
+  if (minutes === 0) {
+    return `${hours} hr${hours === 1 ? '' : 's'}`
+  }
+
+  return `${hours} hr ${minutes} min`
+}
+
 export default async function TeacherDashboardPage() {
   const session = await requireTeacher()
   const data = await getTeacherDashboardData(session.user.id)
@@ -69,20 +84,24 @@ export default async function TeacherDashboardPage() {
         <>
           <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
             <div className="rounded-xl border border-neutral-200 bg-white p-4 shadow-sm sm:p-5">
-              <p className="text-sm text-neutral-500">Active students</p>
+              <p className="text-sm text-neutral-500">Linked students</p>
               <p className="mt-2 text-3xl font-semibold text-neutral-950">{data.summary.activeStudents}</p>
+              <p className="mt-2 text-sm text-neutral-500">Students currently connected to your studio.</p>
             </div>
             <div className="rounded-xl border border-neutral-200 bg-white p-4 shadow-sm sm:p-5">
-              <p className="text-sm text-neutral-500">Students with recent activity</p>
+              <p className="text-sm text-neutral-500">Recently active students</p>
               <p className="mt-2 text-3xl font-semibold text-neutral-950">{data.summary.studentsWithRecentActivity}</p>
+              <p className="mt-2 text-sm text-neutral-500">Students with at least one recent logged session.</p>
             </div>
             <div className="rounded-xl border border-neutral-200 bg-white p-4 shadow-sm sm:p-5">
-              <p className="text-sm text-neutral-500">Recent sessions loaded</p>
+              <p className="text-sm text-neutral-500">Recent sessions</p>
               <p className="mt-2 text-3xl font-semibold text-neutral-950">{data.summary.totalRecentSessions}</p>
+              <p className="mt-2 text-sm text-neutral-500">Latest sessions pulled into this dashboard snapshot.</p>
             </div>
             <div className="rounded-xl border border-neutral-200 bg-white p-4 shadow-sm sm:p-5">
-              <p className="text-sm text-neutral-500">Recent minutes</p>
-              <p className="mt-2 text-3xl font-semibold text-neutral-950">{data.summary.totalRecentMinutes}</p>
+              <p className="text-sm text-neutral-500">Recent practice time</p>
+              <p className="mt-2 text-3xl font-semibold text-neutral-950">{formatMinutes(data.summary.totalRecentMinutes)}</p>
+              <p className="mt-2 text-sm text-neutral-500">Total minutes across the recent activity shown here.</p>
             </div>
           </section>
 
@@ -143,7 +162,7 @@ export default async function TeacherDashboardPage() {
                       <div className="flex flex-wrap items-center justify-between gap-3 text-sm">
                         <p className="text-neutral-600">
                           {summary.latestSession
-                            ? `Last practiced ${formatSessionDate(summary.latestSession.sessionDate)}`
+                            ? `Last practiced ${formatSessionDate(summary.latestSession.sessionDate)} · ${summary.totalRecentMinutes > 0 ? formatMinutes(summary.totalRecentMinutes) : '0 min'} across recent sessions`
                             : 'No sessions logged yet'}
                         </p>
                         <div className="flex flex-wrap gap-3">
@@ -177,7 +196,7 @@ export default async function TeacherDashboardPage() {
                 ) : (
                   <ul className="divide-y divide-neutral-200">
                     {data.activityFeed.map((activity) => (
-                      <li key={activity.sessionId} className="space-y-2 px-4 py-4">
+                      <li key={activity.sessionId} className="space-y-3 px-4 py-4">
                         <div className="flex items-start justify-between gap-3">
                           <div>
                             <p className="font-medium text-neutral-950">{activity.studentName}</p>
@@ -187,9 +206,14 @@ export default async function TeacherDashboardPage() {
                             {activity.loggedItems} item{activity.loggedItems === 1 ? '' : 's'}
                           </span>
                         </div>
-                        <p className="text-sm text-neutral-600">
-                          {activity.durationMinutes ? `${activity.durationMinutes} min logged` : 'Duration not set'}
-                        </p>
+                        <div className="flex flex-wrap gap-2 text-xs text-neutral-600">
+                          <span className="rounded-full bg-neutral-50 px-2.5 py-1 ring-1 ring-neutral-200">
+                            {activity.durationMinutes ? formatMinutes(activity.durationMinutes) : 'Duration not set'}
+                          </span>
+                          <span className="rounded-full bg-neutral-50 px-2.5 py-1 ring-1 ring-neutral-200">
+                            Session logged
+                          </span>
+                        </div>
                         <Link
                           href={`/teacher/students/${activity.studentId}`}
                           className="text-sm font-medium text-neutral-900 underline underline-offset-4"
