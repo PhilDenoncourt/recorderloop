@@ -17,6 +17,7 @@ export default async function AppLayout({ children }: AppLayoutProps) {
   const navItems = isStudent
     ? [
         { href: '/student', label: 'Dashboard' },
+        { href: '/connect', label: 'Connect' },
         { href: '/student/practice-items', label: 'Practice items' },
         { href: '/student/history', label: 'History' },
         { href: '/student/sessions/new', label: 'Log session' },

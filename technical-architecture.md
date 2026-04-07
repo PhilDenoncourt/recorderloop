@@ -870,6 +870,12 @@ Teacher enters student email and invites them.
 ### MVP recommendation
 Use a **simple invite code or generated link**.
 
+For the current implementation, RecorderLoop uses a generated invite code:
+- teacher creates a pending `TeacherStudentLink` with a unique `inviteCode`
+- student signs in, opens `/connect`, and redeems that code
+- the pending link is converted to `ACTIVE`
+- teacher views only load students from active links
+
 This fits the product’s small pilot phase and avoids unnecessary admin complexity.
 
 ---

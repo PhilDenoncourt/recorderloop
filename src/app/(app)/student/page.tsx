@@ -16,6 +16,16 @@ export default async function StudentDashboardPage() {
         </p>
       </div>
 
+      <div className="rounded-xl border border-neutral-200 bg-white p-4 shadow-sm sm:p-5">
+        <p className="text-sm text-neutral-500">Teacher connection</p>
+        <p className="mt-2 text-sm text-neutral-600">
+          Need to link with a teacher? Use their invite code on the connect page.
+        </p>
+        <Link className="mt-4 inline-block text-sm underline underline-offset-4" href="/connect">
+          Open connect page
+        </Link>
+      </div>
+
       <div className="grid gap-4 sm:gap-6 md:grid-cols-3">
         <div className="rounded-xl border border-neutral-200 bg-white p-4 shadow-sm sm:p-5">
           <p className="text-sm text-neutral-500">Active practice items</p>
