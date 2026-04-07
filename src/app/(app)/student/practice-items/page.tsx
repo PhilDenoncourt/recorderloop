@@ -21,18 +21,18 @@ export default async function StudentPracticeItemsPage() {
   })
 
   return (
-    <div className="mx-auto flex max-w-5xl flex-col gap-8 px-6 py-8">
+    <div className="mx-auto flex max-w-5xl flex-col gap-8 px-4 py-6 sm:px-6 sm:py-8">
       <div className="space-y-2">
-        <h1 className="text-3xl font-semibold">Practice items</h1>
+        <h1 className="text-3xl font-semibold tracking-tight">Practice items</h1>
         <p className="text-sm text-neutral-600">
           Keep a focused list of the pieces, exercises, scales, and technique work you’re practicing.
         </p>
       </div>
 
-      <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_380px]">
+      <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_380px] lg:items-start">
         <section className="space-y-4">
-          <div className="rounded-lg border">
-            <div className="border-b px-4 py-3">
+          <div className="overflow-hidden rounded-xl border border-neutral-200 bg-white shadow-sm">
+            <div className="border-b border-neutral-200 px-4 py-3">
               <h2 className="text-lg font-semibold">Your current list</h2>
             </div>
 
@@ -41,7 +41,7 @@ export default async function StudentPracticeItemsPage() {
                 You don’t have any practice items yet. Add your first one to get started.
               </div>
             ) : (
-              <ul className="divide-y">
+              <ul className="divide-y divide-neutral-200">
                 {practiceItems.map((item) => (
                   <li key={item.id} className="space-y-2 px-4 py-4">
                     <div className="flex items-start justify-between gap-4">

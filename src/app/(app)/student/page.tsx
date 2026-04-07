@@ -8,37 +8,37 @@ export default async function StudentDashboardPage() {
   const data = await getStudentDashboardData(session.user.id)
 
   return (
-    <div className="mx-auto flex max-w-5xl flex-col gap-8 px-6 py-8">
+    <div className="mx-auto flex max-w-5xl flex-col gap-8 px-4 py-6 sm:px-6 sm:py-8">
       <div className="space-y-2">
-        <h1 className="text-3xl font-semibold">Student dashboard</h1>
+        <h1 className="text-3xl font-semibold tracking-tight">Student dashboard</h1>
         <p className="text-sm text-neutral-600">
           Your practice items, active assignments, and recent sessions all in one place.
         </p>
       </div>
 
-      <div className="grid gap-6 md:grid-cols-3">
-        <div className="rounded-lg border p-4">
+      <div className="grid gap-4 sm:gap-6 md:grid-cols-3">
+        <div className="rounded-xl border border-neutral-200 bg-white p-4 shadow-sm sm:p-5">
           <p className="text-sm text-neutral-500">Active practice items</p>
           <p className="mt-2 text-3xl font-semibold">{data.practiceItems.length}</p>
-          <Link className="mt-4 inline-block text-sm underline" href="/student/practice-items">
+          <Link className="mt-4 inline-block text-sm underline underline-offset-4" href="/student/practice-items">
             Manage practice items
           </Link>
         </div>
 
-        <div className="rounded-lg border p-4">
+        <div className="rounded-xl border border-neutral-200 bg-white p-4 shadow-sm sm:p-5">
           <p className="text-sm text-neutral-500">Active assignments</p>
           <p className="mt-2 text-3xl font-semibold">{data.assignments.length}</p>
         </div>
 
-        <div className="rounded-lg border p-4">
+        <div className="rounded-xl border border-neutral-200 bg-white p-4 shadow-sm sm:p-5">
           <p className="text-sm text-neutral-500">Recent sessions</p>
           <p className="mt-2 text-3xl font-semibold">{data.recentSessions.length}</p>
         </div>
       </div>
 
       <div className="grid gap-6 lg:grid-cols-2">
-        <section className="rounded-lg border">
-          <div className="border-b px-4 py-3">
+        <section className="overflow-hidden rounded-xl border border-neutral-200 bg-white shadow-sm">
+          <div className="border-b border-neutral-200 px-4 py-3">
             <h2 className="text-lg font-semibold">Current practice items</h2>
           </div>
 
@@ -47,7 +47,7 @@ export default async function StudentDashboardPage() {
               No practice items yet.
             </div>
           ) : (
-            <ul className="divide-y">
+            <ul className="divide-y divide-neutral-200">
               {data.practiceItems.map((item) => (
                 <li key={item.id} className="px-4 py-3">
                   <p className="font-medium">{item.title}</p>
@@ -58,15 +58,15 @@ export default async function StudentDashboardPage() {
           )}
         </section>
 
-        <section className="rounded-lg border">
-          <div className="border-b px-4 py-3">
+        <section className="overflow-hidden rounded-xl border border-neutral-200 bg-white shadow-sm">
+          <div className="border-b border-neutral-200 px-4 py-3">
             <h2 className="text-lg font-semibold">Recent sessions</h2>
           </div>
 
           {data.recentSessions.length === 0 ? (
             <div className="px-4 py-6 text-sm text-neutral-600">No sessions logged yet.</div>
           ) : (
-            <ul className="divide-y">
+            <ul className="divide-y divide-neutral-200">
               {data.recentSessions.map((sessionItem) => (
                 <li key={sessionItem.id} className="px-4 py-3">
                   <p className="font-medium">
