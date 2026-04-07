@@ -7,6 +7,7 @@ Use this sequence to get a clean local/dev boot for RecorderLoop.
 - set `DATABASE_URL`
 - set `AUTH_SECRET`
 - set `AUTH_URL`
+- set `AUTH_TRUST_HOST` (`true` for hosted environments like Render)
 - set `AUTH_EMAIL_FROM`
 - set `RESEND_API_KEY`
 

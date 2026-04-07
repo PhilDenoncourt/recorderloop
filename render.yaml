@@ -1,0 +1,35 @@
+services:
+  - type: web
+    name: recorderloop-web
+    runtime: node
+    plan: starter
+    region: oregon
+    buildCommand: npm ci && npm run db:generate && npm run build
+    startCommand: npm run db:deploy && npm run start
+    healthCheckPath: /login
+    envVars:
+      - key: NODE_VERSION
+        value: 22
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL
+        fromDatabase:
+          name: recorderloop-db
+          property: connectionString
+      - key: AUTH_SECRET
+        generateValue: true
+      - key: AUTH_URL
+        sync: false
+      - key: AUTH_TRUST_HOST
+        value: "true"
+      - key: AUTH_EMAIL_FROM
+        sync: false
+      - key: RESEND_API_KEY
+        sync: false
+
+databases:
+  - name: recorderloop-db
+    plan: starter
+    region: oregon
+    databaseName: recorderloop
+    user: recorderloop
