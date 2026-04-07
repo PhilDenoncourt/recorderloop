@@ -64,6 +64,7 @@ CREATE SCHEMA IF NOT EXISTS recorderloop;
 - `AUTH_EMAIL_FROM` must be a verified sender for your Resend account or magic-link delivery will fail
 - `npm run db:deploy` runs at startup to apply committed Prisma migrations
 - For the first deploy, verify the database connection string uses `schema=recorderloop`
+- Prisma client generation needs to happen during install/build so deploys pick up schema changes; this repo now enforces that with `postinstall`
 
 ### Deploy flow
 1. Push this repo to GitHub
