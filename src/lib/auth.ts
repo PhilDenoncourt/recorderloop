@@ -6,7 +6,7 @@ import { type UserRole } from '@prisma/client'
 import { prisma } from '@/lib/prisma'
 
 const resendKeyPrefix = process.env.RESEND_API_KEY?.slice(0, 6) ?? 'missing'
-console.info('[auth][debug] RESEND_API_KEY prefix:', resendKeyPrefix)
+console.warn('[auth][warn] RESEND_API_KEY prefix:', resendKeyPrefix)
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   adapter: PrismaAdapter(prisma),
