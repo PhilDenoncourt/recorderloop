@@ -47,12 +47,20 @@ export default async function TeacherStudentReviewPage({ params }: TeacherStuden
           <p className="text-sm text-neutral-500">{data.student.email}</p>
         </div>
 
-        <Link
-          href="/teacher/students"
-          className="rounded-md border border-neutral-200 bg-white px-3 py-2 text-sm font-medium text-neutral-700 transition-colors hover:border-neutral-300 hover:text-neutral-950"
-        >
-          Back to students
-        </Link>
+        <div className="flex flex-wrap gap-3">
+          <Link
+            href="/teacher/assignments"
+            className="rounded-md border border-neutral-200 bg-neutral-950 px-3 py-2 text-sm font-medium text-white transition-colors hover:bg-neutral-800"
+          >
+            Create assignment
+          </Link>
+          <Link
+            href="/teacher/students"
+            className="rounded-md border border-neutral-200 bg-white px-3 py-2 text-sm font-medium text-neutral-700 transition-colors hover:border-neutral-300 hover:text-neutral-950"
+          >
+            Back to students
+          </Link>
+        </div>
       </div>
 
       <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">

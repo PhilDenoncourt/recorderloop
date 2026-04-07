@@ -38,6 +38,9 @@ export default async function StudentDashboardPage() {
         <div className="rounded-xl border border-neutral-200 bg-white p-4 shadow-sm sm:p-5">
           <p className="text-sm text-neutral-500">Active assignments</p>
           <p className="mt-2 text-3xl font-semibold">{data.assignments.length}</p>
+          <p className="mt-3 text-sm text-neutral-600">
+            Teacher-assigned work stays separate from your own practice list below.
+          </p>
         </div>
 
         <div className="rounded-xl border border-neutral-200 bg-white p-4 shadow-sm sm:p-5">
@@ -53,6 +56,57 @@ export default async function StudentDashboardPage() {
           </div>
         </div>
       </div>
+
+      <section className="overflow-hidden rounded-xl border border-neutral-200 bg-white shadow-sm">
+        <div className="flex items-center justify-between gap-4 border-b border-neutral-200 px-4 py-3">
+          <div>
+            <h2 className="text-lg font-semibold">Assigned work</h2>
+            <p className="text-sm text-neutral-500">Current assignments from your teacher.</p>
+          </div>
+        </div>
+
+        {data.assignments.length === 0 ? (
+          <div className="px-4 py-6 text-sm text-neutral-600">
+            No active assignments right now. Your self-managed practice items still appear below.
+          </div>
+        ) : (
+          <ul className="divide-y divide-neutral-200">
+            {data.assignments.map((assignment) => (
+              <li key={assignment.id} className="space-y-3 px-4 py-4">
+                <div className="flex flex-wrap items-start justify-between gap-3">
+                  <div>
+                    <p className="font-medium text-neutral-950">{assignment.title}</p>
+                    <p className="text-sm text-neutral-600">
+                      From {assignment.teacher.name || assignment.teacher.email}
+                    </p>
+                  </div>
+                  <span className="rounded-full bg-neutral-100 px-2 py-1 text-xs uppercase tracking-wide text-neutral-600">
+                    {assignment.dueDate
+                      ? `Due ${new Date(assignment.dueDate).toLocaleDateString()}`
+                      : 'No due date'}
+                  </span>
+                </div>
+
+                {assignment.focusAreas ? (
+                  <p className="text-sm text-neutral-600">
+                    <span className="font-medium text-neutral-900">Focus:</span> {assignment.focusAreas}
+                  </p>
+                ) : null}
+
+                {assignment.notes ? <p className="text-sm text-neutral-600">{assignment.notes}</p> : null}
+
+                <div className="flex flex-wrap gap-2 text-xs text-neutral-600">
+                  {assignment.items.map((assignmentItem) => (
+                    <span key={assignmentItem.id} className="rounded-full bg-neutral-100 px-2.5 py-1">
+                      {assignmentItem.practiceItem.title}
+                    </span>
+                  ))}
+                </div>
+              </li>
+            ))}
+          </ul>
+        )}
+      </section>
 
       <div className="grid gap-6 lg:grid-cols-2">
         <section className="overflow-hidden rounded-xl border border-neutral-200 bg-white shadow-sm">
