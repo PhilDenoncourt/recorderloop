@@ -42,7 +42,13 @@ Before generating the migration, the repo should have:
 Expected environment variable:
 
 ```env
-DATABASE_URL="postgresql://USER:PASSWORD@HOST:PORT/DB?schema=public"
+DATABASE_URL="postgresql://USER:PASSWORD@HOST:PORT/DB?schema=recorderloop"
+```
+
+If the schema does not exist yet, create it before running migrations:
+
+```sql
+CREATE SCHEMA IF NOT EXISTS recorderloop;
 ```
 
 ---

@@ -27,6 +27,12 @@ npm run db:generate
 ```
 
 ## 5. Create initial migration
+If you are using a dedicated Postgres schema, create it first if needed:
+```sql
+CREATE SCHEMA IF NOT EXISTS recorderloop;
+```
+
+Then run:
 ```bash
 npx prisma migrate dev --name init
 ```

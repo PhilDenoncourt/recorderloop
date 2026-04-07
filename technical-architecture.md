@@ -994,6 +994,12 @@ Use explicit Prisma migrations committed to repo.
 
 Avoid unmanaged schema drift.
 
+If deploying with a dedicated Postgres schema for RecorderLoop, set `DATABASE_URL` with `schema=recorderloop` and ensure the schema exists before running migrations:
+
+```sql
+CREATE SCHEMA IF NOT EXISTS recorderloop;
+```
+
 ---
 
 ## 28. Local Development Architecture

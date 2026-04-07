@@ -393,11 +393,17 @@ The simplest initial approach is:
 Recommended initial environment variables:
 
 ```env
-DATABASE_URL=
+DATABASE_URL="postgresql://USER:PASSWORD@HOST:PORT/DB?schema=recorderloop"
 AUTH_SECRET=
 AUTH_URL=
 AUTH_EMAIL_FROM=
 RESEND_API_KEY=
+```
+
+If you are targeting a dedicated Postgres schema, create it before running Prisma migrations:
+
+```sql
+CREATE SCHEMA IF NOT EXISTS recorderloop;
 ```
 
 Depending on Auth.js version and provider package, naming may vary slightly.
