@@ -15,7 +15,7 @@ export default async function OnboardingPage() {
   }
 
   return (
-    <main className="mx-auto flex min-h-screen max-w-md flex-col justify-center gap-6 px-6">
+    <div className="mx-auto flex min-h-[calc(100vh-73px)] max-w-md flex-col justify-center gap-6 px-6 py-8">
       <div className="space-y-2">
         <h1 className="text-3xl font-semibold">Welcome to RecorderLoop</h1>
         <p className="text-sm text-muted-foreground">
@@ -27,6 +27,6 @@ export default async function OnboardingPage() {
         defaultDisplayName={session.user.name ?? ''}
         timezone="America/New_York"
       />
-    </main>
+    </div>
   )
 }
