@@ -51,7 +51,7 @@ export default async function TeacherDashboardPage() {
             className="rounded-md border border-neutral-200 bg-white px-3 py-2 font-medium text-neutral-700 transition-colors hover:border-neutral-300 hover:text-neutral-950"
             href="/teacher/assignments"
           >
-            Open assignments
+            Create assignments
           </Link>
         </div>
       </div>
