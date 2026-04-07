@@ -59,7 +59,9 @@ CREATE SCHEMA IF NOT EXISTS recorderloop;
 
 ### Render notes
 - Set `AUTH_URL` to your Render app URL, for example `https://recorderloop-web.onrender.com`
+- If Render injects `RENDER_EXTERNAL_URL`, the app can also use that as a fallback base URL, but setting `AUTH_URL` explicitly is still preferred
 - Configure your Resend sender/domain so magic links can be delivered
+- `AUTH_EMAIL_FROM` must be a verified sender for your Resend account or magic-link delivery will fail
 - `npm run db:deploy` runs at startup to apply committed Prisma migrations
 - For the first deploy, verify the database connection string uses `schema=recorderloop`
 
