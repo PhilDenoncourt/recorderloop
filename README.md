@@ -72,3 +72,13 @@ CREATE SCHEMA IF NOT EXISTS recorderloop;
 3. Fill in the unsynced env vars (`AUTH_URL`, `AUTH_EMAIL_FROM`, `RESEND_API_KEY`)
 4. Confirm the Postgres connection string includes `?schema=recorderloop`
 5. Deploy
+
+### Pilot readiness checklist
+Before inviting real users, verify:
+- magic-link sign-in works end to end in production
+- `AUTH_SECRET`, `AUTH_URL`, `AUTH_TRUST_HOST`, `AUTH_EMAIL_FROM`, and `RESEND_API_KEY` are set correctly
+- the sender in `AUTH_EMAIL_FROM` is verified in Resend
+- onboarding redirects a brand-new account to `/onboarding`
+- student flow works from connect -> practice items -> session logging -> history
+- teacher flow works from invite code -> linked student dashboard -> assignment creation -> student review
+- empty states and permission redirects feel intentional rather than broken

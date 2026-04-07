@@ -51,6 +51,7 @@ export function OnboardingForm({ defaultDisplayName, timezone }: OnboardingFormP
         <label className="block text-sm font-medium" htmlFor="displayName">
           Display name
         </label>
+        <p className="text-xs text-neutral-500">Optional, but helpful if you don’t want to show your raw email address in the app.</p>
         <input
           className="w-full rounded-md border px-3 py-2"
           id="displayName"

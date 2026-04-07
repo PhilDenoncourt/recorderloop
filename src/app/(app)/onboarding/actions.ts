@@ -33,7 +33,7 @@ export async function completeOnboarding(
   if (!parsed.success) {
     return {
       ok: false,
-      error: 'Please complete all required onboarding fields.',
+      error: 'Choose whether you are using RecorderLoop as a student or teacher. Display name and timezone can be adjusted later.',
     }
   }
 

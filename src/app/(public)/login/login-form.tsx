@@ -31,13 +31,20 @@ export function LoginForm() {
 
   return (
     <form action={formAction} className="space-y-4">
-      <input
-        className="w-full rounded-md border px-3 py-2"
-        type="email"
-        name="email"
-        placeholder="you@example.com"
-        required
-      />
+      <div className="space-y-2">
+        <label className="block text-sm font-medium" htmlFor="email">
+          Email address
+        </label>
+        <input
+          id="email"
+          className="w-full rounded-md border px-3 py-2"
+          type="email"
+          name="email"
+          placeholder="you@example.com"
+          autoComplete="email"
+          required
+        />
+      </div>
 
       {state.error ? (
         <p className="rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">

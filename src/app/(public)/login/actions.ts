@@ -35,7 +35,8 @@ export async function requestMagicLink(
     if (error instanceof AuthError) {
       return {
         ok: false,
-        error: 'We could not send a sign-in link right now.',
+        error:
+          'We could not send a sign-in link right now. Double-check the email address and, if this is a deployment, verify AUTH_SECRET, AUTH_URL, AUTH_EMAIL_FROM, and RESEND_API_KEY.',
       }
     }
 
